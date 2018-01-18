@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Pixel Tracker &raquo; EARL &raquo; Login User</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <link rel="stylesheet" href="//s3.amazonaws.com/blocknav/bootstrap-flatly.min.css" media="screen">
+        <link rel="stylesheet" href="//s3.amazonaws.com/blocknav/custom.min.css" media="screen">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales.min.js"></script>
+
+
+        <style>
+            .col-centered{
+                float: none;
+                margin: 0 auto;
+                margin-top: 75px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand"><i class="fa fa-cloud"></i> PixelTracker</a>
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar-main">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-lock"></i> Login
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/">
+                            <i class="fa fa-home"></i> Home</a>
+                        </li>
+                        <li><a href="/register">
+                            <i class="fa fa-user-circle-o"></i> Register</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="container">
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible" style="margin-top:15px;">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                      <p><i class="fa fa-info-circle"></i> {{ message }}</p>
+                 </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="container">
+            <div class="col-lg-6 col-centered">
+                <form class="form-horizontal" method="post" action="{{ url_for('auth_login') }}">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="inputEmail" class="col-lg-2 control-label">Username</label>
+                            <div class="col-lg-10">
+                                <input type="text" name="username" class="form-control" id="inputEmail" placeholder="Email" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+                            <div class="col-lg-10">
+                                <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-arrow-circle-right"></i> Login
+                                </button>
+                                <button type="reset" class="btn btn-default" onclick="location.href='/'">
+                                    <i class="fa fa-times-rectangle-o"></i> Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+        </div> <!-- end: container -->
+
+        <!-- scripts -->
+        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="//s3.amazonaws.com/blocknav/custom.js"></script>
+
+    </body>
+</html>

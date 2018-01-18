@@ -1,0 +1,34 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+    <h3><i class="fa fa-check-square"></i> Pixel Tracker
+        <span class="pull-right">
+            <a href="{{ url_for('add_campaign') }}" class="btn btn-sm btn-primary">
+                <i class="fa fa-plus-square"></i>
+                Add Campaign
+            </a>
+        </span>
+    </h3>
+    <br />
+    <table class="table table-striped table-hover">
+        <tr class="info">
+            <th style="width: 20%">Campaign</th>
+            <th style="width: 20%;">Job Number</th>
+            <th style="width: 15%">Date Created</th>
+            <th style="width: 15%">Captures</th>
+            <th style="width: 15%">Opened</th>
+            <th style="width: 15%">Open %</th>
+        </tr>
+        {% for campaign in campaigns %}
+        <tr>
+            <td><a href="/campaign/{{ campaign.campaign_hash }}">{{ campaign.campaign }}</a></td>
+            <td>{{ campaign.job_number }}</td>
+            <td>{{ campaign.date_sent|formatdate }}</td>
+            <td>{{ campaign.sends }}</td>
+            <td>{{ campaign.opens }}</td>
+            <td><span class="label label-info">{{ campaign.open_percent|round(1) }}</span></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
