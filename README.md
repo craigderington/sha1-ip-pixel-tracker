@@ -1,6 +1,6 @@
-# EARL Flask Pixel Tracker
+# EARL Pixel Tracker
 
-HTTP Pixel tracking using Flask, MongoDB, Redis and Celery.
+Simple implementation of an HTTP Pixel tracking using Flask, MongoDB, Redis and Celery.
 
 # Install redis, mongo, and python-virtualenv
 `apt-get install redis-server mongodb python-virtualenv`
