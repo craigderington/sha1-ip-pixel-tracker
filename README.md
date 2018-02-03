@@ -1,5 +1,4 @@
-flask-pixel-tracker
-===================
+# EARL Flask Pixel Tracker
 
 HTTP Pixel tracking using Flask, MongoDB, Redis and Celery.
 
@@ -30,3 +29,4 @@ this will return a SHA1 hash of the event record that you can pass to:
 http://hostname/pixel.gif?sh=(open_hash_id)
 
 which should be embedded as an image in your outbound email marketing to record opens.
+

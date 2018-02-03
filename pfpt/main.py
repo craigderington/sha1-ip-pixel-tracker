@@ -24,7 +24,7 @@ app.secret_key = config.SECRET_KEY
 app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
 app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
 app.config['MONGO_SERVER'] = 'localhost'
-app.config['MONGO_DB'] = 'flask-pixel-tracker'
+app.config['MONGO_DB'] = 'earl-pixel-tracker'
 
 mongo_client = pymongo.MongoClient(app.config['MONGO_SERVER'], 27017, connect=False)
 mongo_db = mongo_client[app.config['MONGO_DB']]

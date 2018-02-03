@@ -69,7 +69,7 @@ def main(radius, zip_code):
                         if 'Invalid location' in r.content:
                             logging.warning('M1 API Returned No Data for IP: {}'.format(ip))
                         else:
-                            logging.info('{} Appended Data: {}'.format(ip, json.dumps(r.content)))
+                            logging.info('{} {} Appended Data: {}'.format(today, ip, json.dumps(r.content)))
 
                     # update the record and set processed = true
                     sent_collection.update_one({'_id': record_id}, {'$set': {'processed': 1}}, True)
