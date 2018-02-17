@@ -32,7 +32,7 @@
             <th style="width: 15%">Job Number</th>
             <th style="width: 15%;">Send Hash</th>
             <th style="width: 15%">Capture Date</th>
-            <th style="width: 15%">Opens</th>
+            <th style="width: 15%">Number Visits</th>
         </tr>
         {% for item in campaigns.sends %}
         <tr>
@@ -41,7 +41,7 @@
             <td>{{ item.job_number }}</td>
             <td>{{ item.send_hash }}</td>
             <td>{{ item.sent_date|formatdate }}</td>
-            <td>{{ item.opens }}</td>
+            <td>{{ item.num_visits }}</td>
         </tr>
         {% endfor %}
     </table>

@@ -23,7 +23,7 @@ app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
 app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
 app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
-app.config['MONGO_SERVER'] = '172.26.13.37'
+app.config['MONGO_SERVER'] = 'localhost'
 app.config['MONGO_DB'] = 'earl-pixel-tracker'
 
 mongo_client = pymongo.MongoClient(app.config['MONGO_SERVER'], 27017, connect=False)
@@ -82,16 +82,19 @@ def pixel():
 def generate_pixel():
     ip = request.environ['REMOTE_ADDR']
     agent = request.headers.get('User-Agent')
+    referer = request.headers.get('Referer')
+    current_time = datetime.datetime.now()
 
     event_record = {
         'ip': ip,
         'job_number': request.args.get('job_number', None),
         'client_id': request.args.get('client_id', None),
         'campaign': request.args.get('campaign', None),
-        'sent_date': datetime.datetime.now(),
         'opens': 0,
         'agent': agent,
-        'processed': 0
+        'referer': referer,
+        'processed': 0,
+        'num_visits': 1
     }
 
     send_hash = hashlib.sha1('{}'.format(event_record)).hexdigest()
@@ -102,9 +105,18 @@ def generate_pixel():
     event_record['send_hash'] = send_hash
     event_record['campaign_hash'] = campaign_hash
     event_record['open_hash'] = open_hash
+    event_record['sent_date'] = datetime.datetime.now()
 
     sent_collection = mongo_db['sent_collection']
-    sent_collection.insert_one(event_record)
+
+    # check to see if this IP and Send Hash are already in the collection
+    visitor_exists = sent_collection.find_one({'ip': ip, 'send_hash': event_record['send_hash']})
+
+    if visitor_exists is None:
+        # this IP has not been seen recently, add it to the collection
+        sent_collection.insert_one(event_record)
+    else:
+        sent_collection.update_one({'_id': visitor_exists['_id']}, {'$inc': {'num_visits': 1}}, True)
 
     campaign_collection = mongo_db['campaign_collection']
     open_collection = mongo_db['opens_collection']
