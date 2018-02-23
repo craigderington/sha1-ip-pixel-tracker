@@ -29,6 +29,7 @@ app.config['MONGO_DB'] = 'earl-pixel-tracker'
 mongo_client = pymongo.MongoClient(app.config['MONGO_SERVER'], 27017, connect=False)
 mongo_db = mongo_client[app.config['MONGO_DB']]
 
+# Celery can consume the opens, another task perhaps
 celery = Celery('pfpt.main', broker=app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
 
@@ -80,10 +81,18 @@ def pixel():
 
 @app.route("/api/generate-pixel")
 def generate_pixel():
-    ip = request.environ['REMOTE_ADDR']
+    # ip = request.environ['REMOTE_ADDR']
+    if request.headers.getlist("X-Forwarded-For"):
+        ip = request.headers.getlist("X-Forwarded-For")[0]
+    else:
+        ip = request.remote_addr
     agent = request.headers.get('User-Agent')
     referer = request.headers.get('Referer')
     current_time = datetime.datetime.now()
+
+    # create the visitor event record
+    # using these events, the event record is as unique
+    # as a single IP address and device's browser type
 
     event_record = {
         'ip': ip,
@@ -97,19 +106,26 @@ def generate_pixel():
         'num_visits': 1
     }
 
+    # create our hashes
     send_hash = hashlib.sha1('{}'.format(event_record)).hexdigest()
     campaign_hash = hashlib.sha1(event_record['campaign']).hexdigest()
     open_hash = hashlib.sha1('{}:{}'.format(event_record['campaign'],
         event_record['job_number'])).hexdigest()
 
+    # append the event record
     event_record['send_hash'] = send_hash
     event_record['campaign_hash'] = campaign_hash
     event_record['open_hash'] = open_hash
     event_record['sent_date'] = datetime.datetime.now()
 
+    # name the collections
     sent_collection = mongo_db['sent_collection']
+    campaign_collection = mongo_db['campaign_collection']
+    open_collection = mongo_db['opens_collection']
 
     # check to see if this IP and Send Hash are already in the collection
+    # created indexes in MongoDB on IP and SEND_HASH
+    # will rotate this collection every 60-90 days
     visitor_exists = sent_collection.find_one({'ip': ip, 'send_hash': event_record['send_hash']})
 
     if visitor_exists is None:
@@ -117,9 +133,6 @@ def generate_pixel():
         sent_collection.insert_one(event_record)
     else:
         sent_collection.update_one({'_id': visitor_exists['_id']}, {'$inc': {'num_visits': 1}}, True)
-
-    campaign_collection = mongo_db['campaign_collection']
-    open_collection = mongo_db['opens_collection']
 
     if campaign_collection.find_one({'campaign_hash': campaign_hash}) is None:
         campaign_collection.insert_one({
