@@ -1,4 +1,4 @@
-# EARL Pixel Tracker
+# SHA1 IP ADDRESS Pixel Tracker
 
 Simple implementation of an HTTP Pixel tracking using Flask, MongoDB, Redis and Celery.
 
