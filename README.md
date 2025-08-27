@@ -2,6 +2,8 @@
 
 A Flask-based pixel tracker for email marketing using Hashlib, MongoDB, Redis, and Celery.
 
+[View Wiki for Details](https://github.com/craigderington/sha1-ip-pixel-tracker/wiki)
+
 ## Overview
 
 This application provides a simple HTTP pixel tracking system to monitor email opens. It generates SHA1-hashed event records using Python's `hashlib`, stores data in MongoDB, and processes tasks asynchronously with Celery and Redis.
@@ -86,8 +88,11 @@ Contributions are welcome! To contribute:
 - Push to the branch (git push origin feature/your-feature).
 - Open a pull request.
 
+# Wiki
+See the wiki for more details [Wiki](https://github.com/craigderington/sha1-ip-pixel-tracker/wiki)
+
 #### License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 #### Contact
-For questions or feedback, contact Craig Derington.
+For questions or feedback, contact [Craig Derington](https://github.com/craigderington).
